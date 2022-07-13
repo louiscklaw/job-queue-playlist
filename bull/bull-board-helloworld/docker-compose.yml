@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    user: "1000"
+    volumes:
+      - .:/src
+    ports:
+      - "8000:5000"
+    mem_limit: 2000m
+
+  bull_board:
+    build: ./bull-board
+    user: "1000"
+    volumes:
+      - ./bull-board/src:/src
+    ports:
+      - "8001:3000"
+    mem_limit: 2000m
+
+  redis:
+    image: redis
+    # container_name: node_challenge_redis
+    restart: on-failure
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    command: --port 6380
+    ports:
+      - "6380:6380"
+    expose:
+      - "6380"

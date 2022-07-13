@@ -1,0 +1,15 @@
+{
+  "name": "bull",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gitSync": "git fetch --all && git stash && git pull && git push && git stash pop",
+    "gitUpdate": "git add . && git commit -m'update,' && yarn gitSync && git push",
+    "clean-all": "rm -rf **/node_modues",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
