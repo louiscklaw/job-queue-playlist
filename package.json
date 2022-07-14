@@ -6,7 +6,7 @@
   "scripts": {
     "gitSync": "git fetch --all && git pull",
     "gitUpdate": "git add . && git commit -m'update,' && yarn gitSync && git push",
-    "clean-all": "rm -rf **/node_modues",
+    "clean-all": "rm -rf **/node_modules",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint:format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
     "husky_install": "husky install"
