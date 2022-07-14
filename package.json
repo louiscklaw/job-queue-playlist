@@ -7,9 +7,14 @@
     "gitSync": "git fetch --all && git stash && git pull && git push && git stash pop",
     "gitUpdate": "git add . && git commit -m'update,' && yarn gitSync && git push",
     "clean-all": "rm -rf **/node_modues",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint:format": "prettier --write '**/*.{js,jsx,ts,tsx}'",
+    "husky_install": "husky install"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "^2.7.1"
+  }
 }

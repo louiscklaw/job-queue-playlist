@@ -1,11 +1,11 @@
-const Queue = require("bull");
-const fs = require("fs");
-const es = require("event-stream");
-const path = require("path");
+const Queue = require('bull');
+const fs = require('fs');
+const es = require('event-stream');
+const path = require('path');
 
-const PATH_FILE = path.join(__dirname, "data", "epa_hap_daily_summary.csv");
+const PATH_FILE = path.join(__dirname, 'data', 'epa_hap_daily_summary.csv');
 
-const lineQueue = new Queue("line_queue", "redis://redis:6380");
+const lineQueue = new Queue('line_queue', 'redis://redis:6380');
 
 lineQueue.process((job, done) => {
   setTimeout(() => {
@@ -16,9 +16,9 @@ lineQueue.process((job, done) => {
 });
 
 const mainFunction = () => {
-  fs.createReadStream(PATH_FILE, "utf-8")
+  fs.createReadStream(PATH_FILE, 'utf-8')
     .pipe(es.split())
-    .on("data", (data) => {
+    .on('data', (data) => {
       lineQueue.add({ data }, { attempts: 1 });
     });
 
