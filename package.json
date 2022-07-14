@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gitSync": "git fetch --all && git stash && git pull && git push && git stash pop",
+    "gitSync": "git fetch --all && git pull",
     "gitUpdate": "git add . && git commit -m'update,' && yarn gitSync && git push",
     "clean-all": "rm -rf **/node_modues",
     "test": "echo \"Error: no test specified\" && exit 1",
