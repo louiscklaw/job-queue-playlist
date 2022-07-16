@@ -1,10 +1,11 @@
 version: '3.9'
 services:
   bull_board:
-    build: ./bull-board
+    build: .
+    restart: unless-stopped
     user: '1000'
-    volumes:
-      - ./bull-board/src:/src
+    # volumes:
+    #   - ./app:/src
     ports:
       - '8001:3000'
     mem_limit: 2000m
@@ -12,7 +13,7 @@ services:
   redis:
     image: redis
     # container_name: node_challenge_redis
-    restart: on-failure
+    restart: unless-stopped
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     command: --port 6380

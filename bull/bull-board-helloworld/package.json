@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node main.js",
-    "docker": "docker-compose up",
+    "docker": "docker-compose up --build",
     "gitSync": "git fetch --all && git stash && git pull && git stash pop",
     "gitUpdate": "git add . && git commit -m 'update bull-board-helloworld,' && yarn gitSync && git push",
     "test": "echo \"Error: no test specified\" && exit 1"

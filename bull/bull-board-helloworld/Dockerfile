@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
 FROM node:16-alpine3.15
 
-WORKDIR /src
+WORKDIR /app
+
+COPY ./app /app
 
 CMD ["npm", "start"]
