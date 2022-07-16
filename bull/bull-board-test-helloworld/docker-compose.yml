@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  bull_board:
+    build: .
+    restart: unless-stopped
+    user: '1000'
+    # volumes:
+    #   - ./app:/src
+    ports:
+      - '8001:3000'
+    mem_limit: 2000m
+
+  redis:
+    image: redis
+    # container_name: node_challenge_redis
+    restart: unless-stopped
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    command: --port 6380
+    ports:
+      - '6380:6380'
+    expose:
+      - '6380'
