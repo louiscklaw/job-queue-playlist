@@ -4,5 +4,6 @@ FROM node:16-alpine3.15
 WORKDIR /app
 
 COPY ./app /app
+COPY ./data /data
 
 CMD ["npm", "start"]

@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node helloworld.js",
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "docker": "docker-compose up",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +17,10 @@
     "bull": "^4.8.4",
     "bullmq": "^1.86.5",
     "event-stream": "^4.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "nodemon": "latest"
   }
 }

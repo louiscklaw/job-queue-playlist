@@ -4,11 +4,13 @@ services:
     build: .
     restart: unless-stopped
     user: '1000'
-    # volumes:
-    #   - ./app:/src
+    volumes:
+      - ./app:/app
+      - ./data:/data
     ports:
       - '8001:3000'
     mem_limit: 2000m
+    command: yarn dev
 
   redis:
     image: redis

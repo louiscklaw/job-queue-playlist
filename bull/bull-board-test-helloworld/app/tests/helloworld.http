@@ -1,0 +1,17 @@
+GET https://example.com
+
+###
+
+GET http://localhost:8001/helloworld
+
+###
+
+POST http://localhost:8001/post_helloworld
+content-type: application/json
+
+{
+  "HELLO": "WORLD",
+}
+
+###
+
