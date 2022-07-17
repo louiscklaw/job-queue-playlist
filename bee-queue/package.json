@@ -1,0 +1,17 @@
+{
+  "name": "bee-queue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gitSync": "git fetch --all && git stash && git pull --rebase && git stash pop",
+    "gitUpdate": "git add . && git commit -m\"update bee-queue,\" && yarn gitSync && git push"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "husky": "^8.0.1",
+    "prettier": "^2.7.1"
+  }
+}
