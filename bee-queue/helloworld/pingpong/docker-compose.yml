@@ -1,0 +1,31 @@
+version: '3.9'
+services:
+  ping:
+    build: ./ping
+    restart: unless-stopped
+    user: '1000'
+    volumes:
+      - ./ping:/app
+    ports:
+      - '8001:3000'
+    command: npm run dev
+
+  pong:
+    build: ./pong
+    restart: unless-stopped
+    user: '1000'
+    volumes:
+      - ./pong:/app
+    command: npm run dev
+
+  redis:
+    image: redis
+    # container_name: node_challenge_redis
+    restart: unless-stopped
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    command: --port 6379
+    ports:
+      - '6379:6379'
+    expose:
+      - '6379'
