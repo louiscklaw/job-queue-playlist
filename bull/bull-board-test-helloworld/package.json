@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "docker": "docker-compose up --build",
+    "docker_up": "docker-compose up --build",
     "gitSync": "git fetch --all && git stash && git pull && git stash pop",
     "gitUpdate": "git add . && git commit -m 'update bull-board-test-helloworld,' && yarn gitSync && git push",
     "test": "echo \"Error: no test specified\" && exit 1"
