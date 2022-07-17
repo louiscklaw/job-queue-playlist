@@ -1,0 +1,21 @@
+{
+  "name": "bee-queue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gitSync": "git fetch --all && git stash && git pull --rebase && git stash pop",
+    "gitUpdate": "git add . && git commit -m\"update bee-queue,\" && yarn gitSync && git push",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bee-queue": "^1.4.0",
+    "husky": "^8.0.1",
+    "nodemon": "^2.0.19",
+    "prettier": "^2.7.1"
+  }
+}

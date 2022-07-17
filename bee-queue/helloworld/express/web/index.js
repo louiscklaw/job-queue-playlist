@@ -3,8 +3,15 @@ const express = require('express');
 const app = express();
 app.use(logger('dev'));
 
-const Queue = require('../../');
-const queue = new Queue('express-example');
+const Queue = require('bee-queue');
+const queue = new Queue('express-example', {
+  redis: {
+    host: 'redis',
+    port: 6379,
+    db: 0,
+    options: {},
+  },
+});
 
 app.get('/run/:x/:y', function (req, res) {
   const job = queue.createJob({

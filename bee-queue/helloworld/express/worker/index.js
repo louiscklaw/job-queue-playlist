@@ -1,5 +1,13 @@
-const Queue = require('../../');
-const queue = new Queue('express-example');
+const Queue = require('bee-queue');
+
+const queue = new Queue('express-example', {
+  redis: {
+    host: 'redis',
+    port: 6379,
+    db: 0,
+    options: {},
+  },
+});
 
 queue.on('ready', function () {
   queue.process(function (job, done) {
