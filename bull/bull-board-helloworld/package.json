@@ -1,22 +1,24 @@
 {
-  "name": "bull-board-helloworld",
+  "name": "bull-helloworld",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node main.js",
-    "docker": "docker-compose up --build",
+    "start": "node server.js",
     "gitSync": "git fetch --all && git stash && git pull && git stash pop",
-    "gitUpdate": "git add . && git commit -m 'update bull-board-helloworld,' && yarn gitSync && git push",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "gitUpdate": "git add . && git commit -m\"update bull-helloworld,\" && yarn gitSync && git push",
+    "docker_rebuild": "docker-compose kill && docker-compose rm -s -v -f && docker-compose up --build -d",
+    "test": "yarn docker_rebuild && yarn start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@bull-board/express": "^4.0.1",
     "bull": "^4.8.4",
     "event-stream": "^4.0.1",
     "express": "^4.18.1",
-    "mongoose": "^6.4.2"
+    "mongoose": "^6.4.2",
+    "nodemon": "^2.0.19"
   }
 }

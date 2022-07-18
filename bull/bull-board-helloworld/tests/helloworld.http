@@ -1,0 +1,24 @@
+GET https://example.com
+
+###
+
+GET http://localhost:3000/allQueue
+
+###
+
+GET http://localhost:3000/lineQueue
+
+###
+
+GET http://localhost:3000/anotherQueue
+
+###
+
+POST http://localhost:3000/post_helloworld
+content-type: application/json
+
+{
+  "HELLO": "WORLD",
+}
+
+###
