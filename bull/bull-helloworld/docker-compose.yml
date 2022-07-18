@@ -1,13 +1,13 @@
 version: '3.9'
 services:
-  web:
-    build: .
-    user: '1000'
-    volumes:
-      - .:/src
-    ports:
-      - '8000:5000'
-    mem_limit: 2000m
+  # web:
+  #   build: .
+  #   user: '1000'
+  #   volumes:
+  #     - .:/src
+  #   ports:
+  #     - '8000:5000'
+  #   mem_limit: 2000m
 
   redis:
     image: redis
