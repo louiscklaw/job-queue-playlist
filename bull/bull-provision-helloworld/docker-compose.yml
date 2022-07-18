@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+  # web:
+  #   build: .
+  #   user: '1000'
+  #   volumes:
+  #     - .:/src
+  #   ports:
+  #     - '8000:5000'
+  #   mem_limit: 2000m
+
+  redis:
+    image: redis
+    # container_name: node_challenge_redis
+    restart: on-failure
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    command: --port 6380
+    ports:
+      - '6380:6380'
+    expose:
+      - '6380'
+
+  agent:
+    image: portainer/agent
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./volumes/agent:/var/lib/docker/volumes
+    ports:
+      - 9001:9001
+    # networks:
+    # - portainer_agent
+    # container_name: portainer_agent
+
+  portainer:
+    # container_name: portainer
+    image: portainer/portainer-ce
+    restart: always
+    ports:
+      - '8000:8000'
+      - '9000:9000'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./pass:/tmp/pass
+      # - portainer_data:/data
+    command: --admin-password-file /tmp/pass
