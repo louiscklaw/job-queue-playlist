@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node main.js",
+    "start": "node server.js",
     "gitSync": "git fetch --all && git stash && git pull && git stash pop",
     "gitUpdate": "git add . && git commit -m\"update bull-helloworld,\" && yarn gitSync && git push",
     "docker_rebuild": "docker-compose kill && docker-compose rm -s -v -f && docker-compose up --build -d",
