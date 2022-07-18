@@ -1,0 +1,21 @@
+{
+  "name": "agenda-helloworld",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gitSync": "git fetch --all && git stash && git pull --rebase && git stash pop",
+    "gitUpdate": "git add . && git commit -m\"update agenda-helloworld,\" && yarn gitSync && git push",
+    "dev": "nodemon --signal SIGHUP ./index.js",
+    "docker_rebuild": "docker-compose kill && docker-compose rm -f && docker-compose build && docker-compose up -d"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "agenda": "^4.3.0",
+    "agendash": "^3.1.0",
+    "express": "^4.18.1"
+  }
+}
