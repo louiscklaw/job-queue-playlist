@@ -21,27 +21,34 @@ services:
     expose:
       - '6380'
 
-  agent:
+  # environments -> add environment -> docker -> start wizard -> agent -> host=agent-test:9001 -> environment URL=agent-test:9001 -> finish
+  # agent-test:9001
+  portainer-agent-test:
+    container_name: agent-test
     image: portainer/agent
-    restart: always
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./volumes/agent:/var/lib/docker/volumes
+    restart: unless-stopped
     ports:
       - 9001:9001
-    # networks:
-    # - portainer_agent
-    # container_name: portainer_agent
-
-  portainer:
-    # container_name: portainer
-    image: portainer/portainer-ce
-    restart: always
-    ports:
-      - '8000:8000'
-      - '9000:9000'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  portainer-ce-test:
+    container_name: portainer-ce-test
+    image: portainer/portainer-ce:latest
+    restart: unless-stopped
+    environment:
+      PUID: '1000'
+      PGID: '1000'
+      TZ: 'Asia/Hong_Kong'
+      VERSION: 'docker'
+    volumes:
+      # - './volumes/portainer_data/:/data'
+      # - './volumes/:/app/data/custom/'
+      - '/var/run/docker.sock:/var/run/docker.sock'
       - ./pass:/tmp/pass
-      # - portainer_data:/data
+    ports:
+      #- 8000:8000  # only required if using the Edge compute features with Edge agents
+      - 9009:9000 # http
+      # - 9443:9443 # https
     command: --admin-password-file /tmp/pass
+    # command: --admin-password '${CONFIG_PORTAINER_ADMIN_PW}'

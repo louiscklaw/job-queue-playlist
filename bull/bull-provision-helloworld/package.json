@@ -8,7 +8,8 @@
     "gitSync": "git fetch --all && git stash && git pull && git stash pop",
     "gitUpdate": "git add . && git commit -m\"update bull-provision-helloworld,\" && yarn gitSync && git push",
     "docker_rebuild": "docker-compose kill && docker-compose rm -s -v -f && docker-compose up --build -d",
-    "test": "yarn docker_rebuild && yarn start",
+    
+    "test": "yarn start",
     "nodemon_test": "yarn nodemon --exec \"yarn test\""
   },
   "keywords": [],
