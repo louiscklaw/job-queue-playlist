@@ -1,11 +1,13 @@
 {
-  "name": "node-challenger-01",
+  "name": "bull-helloworld",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node main.js",
-    "docker": "docker-compose up",
+    "gitSync": "git fetch --all && git stash && git pull && git stash pop",
+    "gitUpdate": "git add . && git commit -m\"update bull-helloworld,\" && yarn gitSync && git push",
+    "docker_rebuild": "docker-compose kill && docker-compose rm -s -v -f && docker-compose up --build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

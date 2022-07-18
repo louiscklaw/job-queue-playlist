@@ -1,12 +1,12 @@
-version: "3.9"
+version: '3.9'
 services:
   web:
     build: .
-    user: "1000"
+    user: '1000'
     volumes:
       - .:/src
     ports:
-      - "8000:5000"
+      - '8000:5000'
     mem_limit: 2000m
 
   redis:
@@ -17,6 +17,6 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
     command: --port 6380
     ports:
-      - "6380:6380"
+      - '6380:6380'
     expose:
-      - "6380"
+      - '6380'
