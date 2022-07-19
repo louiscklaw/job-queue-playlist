@@ -47,7 +47,7 @@ describe('queue createStackQueue', function () {
       })();
     });
 
-    it('create test container', function (done) {
+    it('create test stack with stack name', function (done) {
       this.timeout(5 * 1000);
       (async () => {
         const response = await fetch('http://localhost:3000/createStackQueue?name=helloworld_stack');
