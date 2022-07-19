@@ -26,9 +26,9 @@ describe('queue helloworld', function () {
     it('get something', function (done) {
       this.timeout(5 * 1000);
       (async () => {
-        const response = await fetch('http://localhost:3000/returnValueQueue');
+        const response = await fetch('http://localhost:3000/helloworld');
         const res_json = await response.json();
-        expect(res_json).to.deep.equalInAnyOrder({ status: 'ok' });
+        expect(res_json).to.deep.equalInAnyOrder({ hello: 'world' });
         done();
       })();
     });
