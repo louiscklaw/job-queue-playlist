@@ -37,7 +37,7 @@ describe('queue helloworld', function () {
 
 describe('queue createStackQueue', function () {
   describe('#createStackQueue', function () {
-    it('get something', function (done) {
+    it('create stack without define stack name, error response', function (done) {
       this.timeout(5 * 1000);
       (async () => {
         const response = await fetch('http://localhost:3000/createStackQueue');
