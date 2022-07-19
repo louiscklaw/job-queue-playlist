@@ -7,6 +7,7 @@ const log = console.log;
 const logInfo = (message) => log(chalk.green(`INFO: ${message}`));
 const logWarning = (message) => log(chalk.yellow(`WARNING: ${message}`));
 const logError = (message) => log(chalk.red(`ERROR: ${message}`));
+const logDebug = (message) => log(message);
 
 const PROJ_HOME = 'D:\\_workspace\\job-queue-playlist\\bull\\bull-provision-helloworld';
 const DOCKER_TEMPLATE_HOME = `${PROJ_HOME}\\docker-templates`;
@@ -49,18 +50,18 @@ module.exports = (app, queue) => {
             var { stack_name } = job.data.params;
 
             await modifyDockerComposeTemplate(DOCKER_COMPOSE_TEMPLATE, DOCKER_COMPOSE_MODIFIED);
-            console.log(`${step} modify docker-compose template done`);
+            logDebug(`${step} modify docker-compose template done`);
             updateProgress(job, step++, total_steps);
 
             var docker = new Dockerode();
             var compose_whoami = new DockerodeCompose(docker, DOCKER_COMPOSE_MODIFIED, stack_name);
 
             await compose_whoami.pull(null);
-            console.log(`${step} pull images done`);
+            logDebug(`${step} pull images done`);
             updateProgress(job, step++, total_steps);
 
             await compose_whoami.up();
-            console.log(`${step} stack up done`);
+            logDebug(`${step} stack up done`);
             updateProgress(job, step++, total_steps);
             done(null, 'create stack done');
           } catch (error) {
@@ -73,25 +74,30 @@ module.exports = (app, queue) => {
         case 'suspend':
           // suspend container by project name
           (async () => {
-            console.log(`suspend stack initiated`);
+            logDebug(`suspend stack initiated`);
             if (!job.data.params.stack_name) {
-              console.log('error stack_name not found');
+              logDebug('error stack_name not found');
               done(new Error('stack_name is required and not null'));
             }
             var { stack_name } = job.data.params;
 
             var docker = new Dockerode();
-            // console.log(`com.docker.compose.project=${stack_name}`);
+            // logDebug(`com.docker.compose.project=${stack_name}`);
             var listContainers = await docker.listContainers({ all: true, filters: { label: [`com.docker.compose.project=${stack_name}`] } });
 
             if (listContainers.length > 0) {
+              logInfo(`number of container to stop ${listContainers.length}`);
               for (var i = 0; i < listContainers.length; i++) {
                 var containerInfo = listContainers[i];
-                logInfo(`suspending ${containerInfo.Id.slice(0, 8)}`);
                 var container_state = await docker.getContainer(containerInfo.Id).inspect();
+                logInfo(`suspending ${containerInfo.Id.slice(0, 8)}, ${container_state.State.Status}`);
+
                 if (container_state.State.Status == 'running') {
-                  console.log('container running, stop container');
-                  await docker.getContainer(containerInfo.Id).stop();
+                  logInfo('container running, stop container');
+                  await docker
+                    .getContainer(containerInfo.Id)
+                    .stop()
+                    .catch((err) => logWarning('container already stopped ?'));
                 } else {
                   logWarning('container is not running, nothing to do');
                 }
@@ -100,13 +106,13 @@ module.exports = (app, queue) => {
               logWarning('no container found to suspend');
             }
 
-            console.log('suspend done');
+            logDebug('suspend done');
             done();
           })();
           break;
 
         case 'remove':
-          console.log(`remove stack initiated`);
+          logDebug(`remove stack initiated`);
           // docker-compose down
           var total_steps = 1;
           var step = 1;
@@ -118,14 +124,14 @@ module.exports = (app, queue) => {
             }
             var { stack_name } = job.data.params;
 
-            console.log('start remove stack');
+            logDebug('start remove stack');
             var docker = new Dockerode();
             var compose_whoami = new DockerodeCompose(docker, DOCKER_COMPOSE_MODIFIED, stack_name);
 
             await compose_whoami.down({ volumes: true });
             updateProgress(job, step++, total_steps);
 
-            console.log('remove stack done');
+            logDebug('remove stack done');
             done(null, 'remove stack done');
           } catch (error) {
             logError({ error: error.message });
