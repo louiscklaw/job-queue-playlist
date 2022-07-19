@@ -42,7 +42,7 @@ describe('queue createStackQueue', function () {
       (async () => {
         const response = await fetch('http://localhost:3000/createStackQueue');
         const res_json = await response.json();
-        expect(res_json).to.deep.equalInAnyOrder({ status: 'ok' });
+        expect(res_json).to.deep.equalInAnyOrder({ status: 'error', message: 'name is required' });
         done();
       })();
     });
@@ -52,7 +52,7 @@ describe('queue createStackQueue', function () {
       (async () => {
         const response = await fetch('http://localhost:3000/createStackQueue?name=helloworld_stack');
         const res_json = await response.json();
-        expect(res_json).to.deep.equalInAnyOrder({ status: 'ok' });
+        expect(res_json).to.deep.equalInAnyOrder({ status: 'accepted' });
         done();
       })();
     });

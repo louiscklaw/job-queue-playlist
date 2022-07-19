@@ -5,9 +5,6 @@ const { createBullBoard } = require('@bull-board/api');
 const { BullAdapter } = require('@bull-board/api/bullAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
 
-const lineQueue = require('./lib/queues/lineQueue');
-const anotherQueue = require('./lib/queues/anotherQueue');
-
 const initReturnValueQueue = require('./queues/returnValueQueue');
 const returnValueQueue = new Queue('returnValueQueue', 'redis://localhost:6380');
 
@@ -26,7 +23,7 @@ const serverAdapter = new ExpressAdapter({ basePath: '/admin/queues' });
 
 serverAdapter.setBasePath('/admin/queues');
 const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
-  queues: [new BullAdapter(lineQueue), new BullAdapter(anotherQueue), new BullAdapter(returnValueQueue), new BullAdapter(dockerOperationQueue)],
+  queues: [new BullAdapter(returnValueQueue), new BullAdapter(dockerOperationQueue)],
   serverAdapter: serverAdapter,
 });
 
