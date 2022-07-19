@@ -1,6 +1,12 @@
+const chalk = require('chalk');
 var Dockerode = require('dockerode');
 var DockerodeCompose = require('dockerode-compose');
 const fs = require('fs');
+
+const log = console.log;
+const logInfo = (message) => log(chalk.green(`INFO: ${message}`));
+const logWarning = (message) => log(chalk.yellow(`WARNING: ${message}`));
+const logError = (message) => log(chalk.red(`ERROR: ${message}`));
 
 const PROJ_HOME = 'D:\\_workspace\\job-queue-playlist\\bull\\bull-provision-helloworld';
 const DOCKER_TEMPLATE_HOME = `${PROJ_HOME}\\docker-templates`;
@@ -21,6 +27,7 @@ module.exports = (app, queue) => {
   queue.process((job, done) => {
     (async () => {
       if (!job.data.params) {
+        logError('params is required');
         done(new Error('params is required and not null'));
       }
 
@@ -28,14 +35,15 @@ module.exports = (app, queue) => {
 
       switch (oper) {
         case 'create':
-          console.log('create stack initiated');
+          logInfo('create stack initiated');
+
           // docker-compose up
           var total_steps = 3;
           var step = 1;
 
           try {
             if (!job.data.params.stack_name) {
-              console.log('error stack_name not found');
+              logError('error stack_name not found');
               done(new Error('stack_name is required and not null'));
             }
             var { stack_name } = job.data.params;
@@ -73,23 +81,23 @@ module.exports = (app, queue) => {
             var { stack_name } = job.data.params;
 
             var docker = new Dockerode();
-            console.log(`com.docker.compose.project=${stack_name}`);
+            // console.log(`com.docker.compose.project=${stack_name}`);
             var listContainers = await docker.listContainers({ all: true, filters: { label: [`com.docker.compose.project=${stack_name}`] } });
 
             if (listContainers.length > 0) {
               for (var i = 0; i < listContainers.length; i++) {
                 var containerInfo = listContainers[i];
-                console.log(`suspending ${containerInfo.Id}`);
+                logInfo(`suspending ${containerInfo.Id.slice(0, 8)}`);
                 var container_state = await docker.getContainer(containerInfo.Id).inspect();
                 if (container_state.State.Status == 'running') {
                   console.log('container running, stop container');
                   await docker.getContainer(containerInfo.Id).stop();
                 } else {
-                  console.log('container is not running, nothing to do');
+                  logWarning('container is not running, nothing to do');
                 }
               }
             } else {
-              console.log('no container found to suspend');
+              logWarning('no container found to suspend');
             }
 
             console.log('suspend done');
@@ -105,7 +113,7 @@ module.exports = (app, queue) => {
 
           try {
             if (!job.data.params.stack_name) {
-              console.log('error stack_name not found');
+              logError('error stack_name not found');
               done(new Error('stack_name is required and not null'));
             }
             var { stack_name } = job.data.params;
@@ -120,13 +128,13 @@ module.exports = (app, queue) => {
             console.log('remove stack done');
             done(null, 'remove stack done');
           } catch (error) {
-            console.log({ error: error.message });
+            logError({ error: error.message });
             done(new Error({ message: 'error during remove stack', error }));
           }
           break;
 
         default:
-          console.log({ error: `cannot find oper ${oper}` });
+          logError({ error: `cannot find oper ${oper}` });
           done(new Error('oper not found'));
           break;
       }
