@@ -34,3 +34,27 @@ describe('queue helloworld', function () {
     });
   });
 });
+
+describe('queue createStackQueue', function () {
+  describe('#createStackQueue', function () {
+    it('get something', function (done) {
+      this.timeout(5 * 1000);
+      (async () => {
+        const response = await fetch('http://localhost:3000/createStackQueue');
+        const res_json = await response.json();
+        expect(res_json).to.deep.equalInAnyOrder({ status: 'ok' });
+        done();
+      })();
+    });
+
+    it('create test container', function (done) {
+      this.timeout(5 * 1000);
+      (async () => {
+        const response = await fetch('http://localhost:3000/createStackQueue?name=helloworld_stack');
+        const res_json = await response.json();
+        expect(res_json).to.deep.equalInAnyOrder({ status: 'ok' });
+        done();
+      })();
+    });
+  });
+});

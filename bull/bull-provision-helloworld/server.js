@@ -14,6 +14,9 @@ const returnValueQueue = new Queue('returnValueQueue', 'redis://localhost:6380')
 const initDockerOperationQueue = require('./queues/dockerOperationQueue');
 const dockerOperationQueue = new Queue('dockerOperationQueue', 'redis://localhost:6380');
 
+const initCreateStackQueue = require('./queues/createStackQueue');
+const createStackQueue = new Queue('createStackQueue', 'redis://localhost:6380');
+
 const routes = require('./routes');
 
 const app = express();
@@ -36,6 +39,7 @@ routes(app);
 // production queue
 initReturnValueQueue(app, returnValueQueue);
 initDockerOperationQueue(app, dockerOperationQueue);
+initCreateStackQueue(app, createStackQueue);
 
 app.listen(3000, () => {
   console.log('Running on 3000...');
