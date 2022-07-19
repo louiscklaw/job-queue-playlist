@@ -4,12 +4,12 @@ module.exports = (app, queue) => {
   queue.process((job, done) => {
     var { name } = job.data;
     (async () => {
-      await fetch(`http://localhost:3000/dockerOperationQueue?oper=create&stack_name=${name}`);
+      await fetch(`http://localhost:3000/dockerOperationQueue?oper=remove&stack_name=${name}`);
       done(null, { return: 'value return ?' });
     })();
   });
 
-  app.get('/createStackQueue', (req, res) => {
+  app.get('/removeStackQueue', (req, res) => {
     if (!req.query.name) {
       res.send({ status: 'error', message: 'name is required' });
       return;

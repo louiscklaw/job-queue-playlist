@@ -14,6 +14,12 @@ const dockerOperationQueue = new Queue('dockerOperationQueue', 'redis://localhos
 const initCreateStackQueue = require('./queues/createStackQueue');
 const createStackQueue = new Queue('createStackQueue', 'redis://localhost:6380');
 
+const initRemoveStackQueue = require('./queues/removeStackQueue');
+const removeStackQueue = new Queue('removeStackQueue', 'redis://localhost:6380');
+
+const initSuspendStackQueue = require('./queues/suspendStackQueue');
+const suspendStackQueue = new Queue('suspendStackQueue', 'redis://localhost:6380');
+
 const routes = require('./routes');
 
 const app = express();
@@ -23,7 +29,7 @@ const serverAdapter = new ExpressAdapter({ basePath: '/admin/queues' });
 
 serverAdapter.setBasePath('/admin/queues');
 const { addQueue, removeQueue, setQueues, replaceQueues } = createBullBoard({
-  queues: [new BullAdapter(returnValueQueue), new BullAdapter(dockerOperationQueue)],
+  queues: [new BullAdapter(suspendStackQueue), , new BullAdapter(returnValueQueue), new BullAdapter(removeStackQueue), new BullAdapter(dockerOperationQueue)],
   serverAdapter: serverAdapter,
 });
 
@@ -37,6 +43,8 @@ routes(app);
 initReturnValueQueue(app, returnValueQueue);
 initDockerOperationQueue(app, dockerOperationQueue);
 initCreateStackQueue(app, createStackQueue);
+initRemoveStackQueue(app, removeStackQueue);
+initSuspendStackQueue(app, suspendStackQueue);
 
 app.listen(3000, () => {
   console.log('Running on 3000...');
