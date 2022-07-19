@@ -1,6 +1,6 @@
 const lineQueue = require('../lib/queues/lineQueue');
 const anotherQueue = require('../lib/queues/anotherQueue');
-const returnValueQueue = require('../lib/queues/returnValueQueue');
+// const returnValueQueue = require('../lib/queues/returnValueQueue');
 
 module.exports = function (app) {
   app.get('/helloworld', (req, res) => {
@@ -23,11 +23,6 @@ module.exports = function (app) {
     for (i = 0; i < 2; i++) {
       lineQueue.add({ data: 'abcde' }, { attempts: 1 });
       anotherQueue.add({ data: '123321' }, { attempts: 1 });
-    }
-  });
-  app.get('/returnValueQueue', (req, res) => {
-    for (i = 0; i < 2; i++) {
-      returnValueQueue.add({ data: 'returnValueQueue' }, { attempts: 1 });
     }
   });
 };
