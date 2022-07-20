@@ -9,7 +9,7 @@
     "gitSync": "git fetch --all && git stash && git pull && git stash pop",
     "gitUpdate": "git add . && git commit -m\"update bull-provision-helloworld,\" && yarn gitSync && git push",
     "docker_rebuild": "docker-compose kill && docker-compose rm -s -v -f && docker-compose up --build -d",
-    "test": "yarn mocha",
+    "test": "yarn mocha ./test/**/*.test.js",
     "nodemon_test": "yarn nodemon --delay 3 --exec \"yarn test\""
   },
   "keywords": [],
