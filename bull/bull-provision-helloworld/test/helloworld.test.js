@@ -45,46 +45,46 @@ describe('queue helloworld', function () {
   });
 });
 
-describe('queue createStackQueue', function () {
-  describe('#createStackQueue', function () {
-    it('create stack without define stack name, error response', function (done) {
-      this.timeout(5 * 1000);
-      (async () => {
-        const response = await fetch('http://localhost:3000/createStackQueue');
-        const res_json = await response.json();
-        expect(res_json).to.deep.equalInAnyOrder({ status: 'error', message: 'name is required' });
-        done();
-      })();
-    });
+// describe('queue createStackQueue', function () {
+//   describe('#createStackQueue', function () {
+//     it('create stack without define stack name, error response', function (done) {
+//       this.timeout(5 * 1000);
+//       (async () => {
+//         const response = await fetch('http://localhost:3000/createStackQueue');
+//         const res_json = await response.json();
+//         expect(res_json).to.deep.equalInAnyOrder({ status: 'error', message: 'name is required' });
+//         done();
+//       })();
+//     });
 
-    it('create test stack with stack name', function (done) {
-      this.timeout(5 * 1000);
-      (async () => {
-        const response = await fetch('http://localhost:3000/createStackQueue?name=helloworld_stack');
-        const res_json = await response.json();
-        expect(res_json).to.deep.equalInAnyOrder({ status: 'accepted' });
-        done();
-      })();
-    });
+//     it('create test stack with stack name', function (done) {
+//       this.timeout(5 * 1000);
+//       (async () => {
+//         const response = await fetch('http://localhost:3000/createStackQueue?name=helloworld_stack');
+//         const res_json = await response.json();
+//         expect(res_json).to.deep.equalInAnyOrder({ status: 'accepted' });
+//         done();
+//       })();
+//     });
 
-    it('suspend stack with stack name', function (done) {
-      this.timeout(5 * 1000);
-      (async () => {
-        const response = await fetch('http://localhost:3000/suspendStackQueue?name=helloworld_stack');
-        const res_json = await response.json();
-        expect(res_json).to.deep.equalInAnyOrder({ status: 'accepted' });
-        done();
-      })();
-    });
+//     it('suspend stack with stack name', function (done) {
+//       this.timeout(5 * 1000);
+//       (async () => {
+//         const response = await fetch('http://localhost:3000/suspendStackQueue?name=helloworld_stack');
+//         const res_json = await response.json();
+//         expect(res_json).to.deep.equalInAnyOrder({ status: 'accepted' });
+//         done();
+//       })();
+//     });
 
-    it('suspend stack with stack name, (stop a already stopped container)', function (done) {
-      this.timeout(5 * 1000);
-      (async () => {
-        const response = await fetch('http://localhost:3000/suspendStackQueue?name=helloworld_stack');
-        const res_json = await response.json();
-        expect(res_json).to.deep.equalInAnyOrder({ status: 'accepted' });
-        done();
-      })();
-    });
-  });
-});
+//     it('suspend stack with stack name, (stop a already stopped container)', function (done) {
+//       this.timeout(5 * 1000);
+//       (async () => {
+//         const response = await fetch('http://localhost:3000/suspendStackQueue?name=helloworld_stack');
+//         const res_json = await response.json();
+//         expect(res_json).to.deep.equalInAnyOrder({ status: 'accepted' });
+//         done();
+//       })();
+//     });
+//   });
+// });

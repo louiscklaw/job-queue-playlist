@@ -18,9 +18,15 @@ function updateProgress(job, step, total_steps) {
   return job.progress(Math.floor((step / total_steps) * 100));
 }
 
-async function modifyDockerComposeTemplate(source_file_path, target_file_path) {
-  var temp = await fs.readFileSync(source_file_path);
-  await fs.writeFileSync(target_file_path, temp);
+async function modifyDockerComposeTemplate(source_file_path, target_file_path, options_to_replace) {
+  var temp = await fs.readFileSync(source_file_path, { encoding: 'utf-8' });
+  Object.keys(options_to_replace).forEach((keys) => {
+    // ${helloworld} ==> \$\{helloworld\}
+    var replace = '\\$\\{' + keys + '\\}';
+    var re = new RegExp(replace, 'g');
+    temp = temp.replace(re, options_to_replace[keys]);
+  });
+  await fs.writeFileSync(target_file_path, temp, { encoding: 'utf-8' });
   return;
 }
 
@@ -49,7 +55,14 @@ module.exports = (app, queue) => {
             }
             var { stack_name } = job.data.params;
 
-            await modifyDockerComposeTemplate(DOCKER_COMPOSE_TEMPLATE, DOCKER_COMPOSE_MODIFIED);
+            await modifyDockerComposeTemplate(DOCKER_COMPOSE_TEMPLATE, DOCKER_COMPOSE_MODIFIED, {
+              PROJECT_NAME: stack_name,
+              SUBDOMAIN_NAME: stack_name.toLowerCase(),
+              ROUTERS_NAME: stack_name.toLowerCase(),
+              MIDDLEWARES_NAME: stack_name.toLowerCase(),
+              SERVICES_NAME: stack_name.toLowerCase(),
+              LOWER_CASE_PROJECT_NAME: stack_name.toLowerCase(),
+            });
             logDebug(`${step} modify docker-compose template done`);
             updateProgress(job, step++, total_steps);
 

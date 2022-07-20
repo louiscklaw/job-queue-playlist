@@ -1,18 +1,10 @@
 version: '3.9'
-services:
-  # web:
-  #   build: .
-  #   user: '1000'
-  #   volumes:
-  #     - .:/src
-  #   ports:
-  #     - '8000:5000'
-  #   mem_limit: 2000m
 
+services:
   redis:
     image: redis
     # container_name: node_challenge_redis
-    restart: on-failure
+    restart: unless-stopped
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     command: --port 6380
@@ -21,34 +13,76 @@ services:
     expose:
       - '6380'
 
-  # environments -> add environment -> docker -> start wizard -> agent -> host=agent-test:9001 -> environment URL=agent-test:9001 -> finish
-  # agent-test:9001
-  portainer-agent-test:
-    container_name: agent-test
-    image: portainer/agent
-    restart: unless-stopped
-    ports:
-      - 9001:9001
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  portainer-ce-test:
-    container_name: portainer-ce-test
-    image: portainer/portainer-ce:latest
+  postgres:
+    # container_name: postgres
+    image: 'postgres:13.1-alpine'
     restart: unless-stopped
     environment:
-      PUID: '1000'
-      PGID: '1000'
-      TZ: 'Asia/Hong_Kong'
-      VERSION: 'docker'
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin_Aa1234567
+      - POSTGRES_DB=test_database
     volumes:
-      # - './volumes/portainer_data/:/data'
-      # - './volumes/:/app/data/custom/'
-      - '/var/run/docker.sock:/var/run/docker.sock'
-      - ./pass:/tmp/pass
+      - ./volumes/postgres:/data/postgres
     ports:
-      #- 8000:8000  # only required if using the Edge compute features with Edge agents
-      - 9009:9000 # http
-      # - 9443:9443 # https
-    command: --admin-password-file /tmp/pass
-    # command: --admin-password '${CONFIG_PORTAINER_ADMIN_PW}'
+      - '5051:5432'
+
+  pgadmin:
+    # container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@123.com
+      PGADMIN_DEFAULT_PASSWORD: Aa1234567
+    ports:
+      - '5050:80'
+    volumes:
+      - ./volumes/pgadmin:/root/.pgadmin
+    depends_on:
+      - postgres
+
+  # https://postgrest.org/en/stable/tutorials/tut0.html
+  postgrest:
+    image: postgrest/postgrest:v9.0.0
+    restart: unless-stopped
+    ports:
+      - 3003:3000
+    environment:
+      PGRST_DB_URI: postgres://admin:admin_Aa1234567@postgres:5432/test_database
+      PGRST_DB_SCHEMA: api
+      PGRST_DB_ANON_ROLE: web_anon
+      PGRST_JWT_SECRET: PASSWORDpasswordPASSWORDpassword
+      PGRST_LOG_LEVEL: info
+    depends_on:
+      - postgres
+
+  # # environments -> add environment -> docker -> start wizard -> agent -> host=agent-test:9001 -> environment URL=agent-test:9001 -> finish
+  # # agent-test:9001
+  # portainer-agent-test:
+  #   container_name: agent-test
+  #   image: portainer/agent
+  #   restart: unless-stopped
+  #   ports:
+  #     - 9001:9001
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock
+
+  # portainer-ce-test:
+  #   container_name: portainer-ce-test
+  #   image: portainer/portainer-ce:latest
+  #   restart: unless-stopped
+  #   environment:
+  #     PUID: '1000'
+  #     PGID: '1000'
+  #     TZ: 'Asia/Hong_Kong'
+  #     VERSION: 'docker'
+  #   volumes:
+  #     # - './volumes/portainer_data/:/data'
+  #     # - './volumes/:/app/data/custom/'
+  #     - '/var/run/docker.sock:/var/run/docker.sock'
+  #     - ./pass:/tmp/pass
+  #   ports:
+  #     #- 8000:8000  # only required if using the Edge compute features with Edge agents
+  #     - 9009:9000 # http
+  #     # - 9443:9443 # https
+  #   command: --admin-password-file /tmp/pass
+  #   # command: --admin-password '${CONFIG_PORTAINER_ADMIN_PW}'
