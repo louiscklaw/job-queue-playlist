@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  whoami1:
+    image: 'traefik/whoami'
+    restart: always
+    # labels:
+    #   - com.docker.compose.project=${PROJECT_NAME}
+    #   - 'traefik.enable=true'
+    #   - 'traefik.http.routers.${ROUTERS_NAME}-http.rule=Host(`${SUBDOMAIN_NAME}.iamon99.com`)'
+    #   - 'traefik.http.routers.${ROUTERS_NAME}-http.entrypoints=web'
+    #   - 'traefik.http.routers.${ROUTERS_NAME}-http.middlewares=${MIDDLEWARES_NAME}-https'
+    #   - 'traefik.http.middlewares.${MIDDLEWARES_NAME}-https.redirectscheme.scheme=https'
+
+    #   - 'traefik.http.routers.${ROUTERS_NAME}-https.rule=Host(`${SUBDOMAIN_NAME}.iamon99.com`)'
+    #   - 'traefik.http.routers.${ROUTERS_NAME}-https.entrypoints=websecure'
+    #   - 'traefik.http.routers.${ROUTERS_NAME}-https.tls.certresolver=myresolver'
+    #   - 'traefik.http.services.${SERVICES_NAME}-https.loadbalancer.server.port=8000'

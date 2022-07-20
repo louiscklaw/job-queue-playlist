@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const fetch = require('node-fetch');
 var Dockerode = require('dockerode');
 var DockerodeCompose = require('dockerode-compose');
 const fs = require('fs');
@@ -30,6 +31,48 @@ async function modifyDockerComposeTemplate(source_file_path, target_file_path, o
   return;
 }
 
+function checkEmptyStackName(job, done) {
+  if (!job.data.params.stack_name) {
+    logError('error stack_name not found');
+    done(new Error('stack_name is required and not null'));
+  }
+
+  return;
+}
+
+async function fetchBlackList(done) {
+  if (process.env.NODE_ENV === 'production') {
+    logError('production black list json fetch not handled');
+    return ['whoami'];
+  }
+  return await fetch('http://localhost:3001/blacklist')
+    .then((res) => res.json())
+    .catch((err) => {
+      logError('error fetching black list');
+      done(new Error('cannot fetch subdomain name black list'));
+    });
+}
+
+async function checkDuplicateStackName(job, done) {
+  var black_list = await fetchBlackList(done);
+
+  var { stack_name } = job.data.params;
+  if (black_list.indexOf(stack_name) > -1) {
+    logError('error black listed stack_name found');
+    done(new Error('stack_name is in black list'));
+  }
+  return;
+}
+
+function checkValidJobData(job, done) {
+  (async () => {
+    await checkEmptyStackName(job, done);
+    await checkDuplicateStackName(job, done);
+  })();
+
+  return;
+}
+
 module.exports = (app, queue) => {
   queue.process((job, done) => {
     (async () => {
@@ -49,11 +92,14 @@ module.exports = (app, queue) => {
           var step = 1;
 
           try {
-            if (!job.data.params.stack_name) {
+            checkValidJobData(job, done);
+
+            var { stack_name } = job.data.params;
+
+            if (stack_name) {
               logError('error stack_name not found');
               done(new Error('stack_name is required and not null'));
             }
-            var { stack_name } = job.data.params;
 
             await modifyDockerComposeTemplate(DOCKER_COMPOSE_TEMPLATE, DOCKER_COMPOSE_MODIFIED, {
               PROJECT_NAME: stack_name,

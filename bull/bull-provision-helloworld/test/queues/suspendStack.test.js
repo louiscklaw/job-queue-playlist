@@ -13,7 +13,7 @@ chai.use(deepEqualInAnyOrder);
 var docker = new Dockerode();
 var compose_whoami = new DockerodeCompose(
   docker,
-  'D:\\_workspace\\job-queue-playlist\\bull\\bull-provision-helloworld\\docker-templates\\whoami.yml',
+  'D:\\_workspace\\job-queue-playlist\\bull\\bull-provision-helloworld\\docker-templates\\helloworld.yml',
   'helloworld_stack'
 );
 

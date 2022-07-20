@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "yarn nodemon --exec yarn start",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "dev": "cross-env NODE_ENV=development node server.js",
+    "nodemon_dev": "yarn nodemon --exec yarn dev",
+    "json_server": "json-server --watch utils/db.json --port 3001",
     "gitSync": "git fetch --all && git stash && git pull && git stash pop",
     "gitUpdate": "git add . && git commit -m\"update bull-provision-helloworld,\" && yarn gitSync && git push",
     "docker_rebuild": "docker-compose kill && docker-compose rm -s -v -f && docker-compose up --build -d",
@@ -20,6 +22,7 @@
     "bull": "^4.8.4",
     "chai": "^4.3.6",
     "chalk": "4.1.2",
+    "cross-env": "^7.0.3",
     "deep-equal-in-any-order": "^2.0.0",
     "dockerode": "^3.3.2",
     "dockerode-compose": "^1.3.1",
@@ -29,5 +32,8 @@
     "mongoose": "^6.4.2",
     "node-fetch": "2",
     "nodemon": "^2.0.19"
+  },
+  "devDependencies": {
+    "json-server": "^0.17.0"
   }
 }
