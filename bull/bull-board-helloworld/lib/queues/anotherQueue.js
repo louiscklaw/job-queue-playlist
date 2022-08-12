@@ -1,5 +1,5 @@
 const Queue = require('bull');
-const lineQueue = new Queue('anotherQueue', 'redis://localhost:6380');
+const lineQueue = new Queue('anotherQueue', 'redis://redis:6380');
 
 lineQueue.process((job, done) => {
   setTimeout(() => {

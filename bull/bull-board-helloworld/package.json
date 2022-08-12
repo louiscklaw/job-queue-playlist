@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "gitSync": "git fetch --all && git stash && git pull && git stash pop",
-    "gitUpdate": "git add . && git commit -m\"update bull-helloworld,\" && yarn gitSync && git push",
-    "docker_rebuild": "docker-compose kill && docker-compose rm -s -v -f && docker-compose up --build -d",
-    "test": "yarn docker_rebuild && yarn start"
+    "gitSync": "git fetch --all && git pull",
+    "gitUpdate": "git add . && git commit -m\"update bull-board-helloworld,\" && yarn gitSync && git push",
+    "docker_rebuild": "docker compose up --build -d --remove-orphans",
+    "test": "yarn docker_rebuild && yarn start",
+    "into_app": "docker compose exec -it web bash"
   },
   "keywords": [],
   "author": "",
